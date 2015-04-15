@@ -4,29 +4,33 @@ public class Caja extends Thread{
 
     private final Cola cola;
     private final Contabilidad contabilidad;
-    private boolean abierta;
+    private boolean estaAbierta;
 
     public Caja(Cola cola, Contabilidad contabilidad) {
         this.cola = cola;
         this.contabilidad = contabilidad;
-        abierta = true;
+        estaAbierta = true;
     }
 
     public void atenderCliente() throws InterruptedException {
-        if (llamarCliente() == null || abierta == false) return;
-        sleep((long) (damePrecioCliente() / 10));
-
-        contabilidad.añadeSaldo(damePrecioCliente());
+        Cliente clienteActual = llamarCliente();
+        if (clienteActual == null || estaAbierta) return;
+        sleep((long) (damePrecio(clienteActual) / 10));
+        if (!estaAbierta) {
+            cola.añadirPrincipio(clienteActual);
+            return;
+        }
+        contabilidad.añadeSaldo(damePrecio(clienteActual));
     }
 
     private Cliente llamarCliente() throws InterruptedException {
         Cliente cliente = cola.sacar();
-        if (cliente == null) abierta = false;
+        if (cliente == null) estaAbierta = false;
         return cliente;
     }
 
-    private double damePrecioCliente() throws InterruptedException {
-        return llamarCliente().damePrecioCarro();
+    private double damePrecio(Cliente clienteActual) throws InterruptedException {
+        return clienteActual.damePrecioCarro();
     }
 
 }

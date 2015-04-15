@@ -29,8 +29,8 @@ public class Cola {
         }
     }
 
-    public void añadirPrincipio() {
-        colaClientes.add(0, new Cliente());
+    public void añadirPrincipio(Cliente cliente) {
+        colaClientes.add(0,cliente);
     }
 
     public Cliente sacar() throws InterruptedException {
