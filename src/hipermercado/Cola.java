@@ -2,15 +2,19 @@ package hipermercado;
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 public class Cola {
 
-    ArrayList<Cliente> colaClientes;
+    private ArrayList<Cliente> colaClientes;
+    private int actualClientes;
     private int maxClientes;
     private int estadoCola = 0;  // 0 --> Abierta  1 --> Cerrada
 
     public Cola() {
         colaClientes = new ArrayList<Cliente>();
         maxClientes = 0;
+        actualClientes = 0;
     }
 
     public int getMaxClientes() {
@@ -18,31 +22,47 @@ public class Cola {
     }
 
     public void añadirFinal() {
-        if(estaAbierta()) colaClientes.add(new Cliente());
+        if (estaAbierta()) {
+            actualClientes++;
+            if (actualClientes > maxClientes) maxClientes = actualClientes;
+            colaClientes.add(new Cliente());
+        }
     }
 
     public void añadirPrincipio() {
         colaClientes.add(0, new Cliente());
     }
 
-    public Cliente sacar() {
+    public Cliente sacar() throws InterruptedException {
         if (hayClientesCola()) {
             Cliente cliente = colaClientes.get(0);
             colaClientes.remove(0);
+            actualClientes--;
         } else {
-            if (!estaAbierta()) {
-                //Semaforo que espera 10 segundos. Si llega un cliente en esos 10 pasa. Si no.
-
+            if (estaAbierta()) {
+                return esperarSegundos();
             }
         }
         return null;
     }
 
-    public void cerrar(){
+    public void cerrar() {
         estadoCola = 1;
     }
 
-    private boolean hayClientesCola(){
+    private Cliente esperarSegundos() throws InterruptedException {
+        for (int i = 0; i < 10; i++) {
+            sleep(1);
+            if (hayClientesCola()) {
+                Cliente cliente = colaClientes.get(0);
+                colaClientes.remove(0);
+                actualClientes--;
+            }
+        }
+        return null;
+    }
+
+    private boolean hayClientesCola() {
         return (!colaClientes.isEmpty());
     }
 
