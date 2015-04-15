@@ -8,7 +8,7 @@ public class Contabilidad {
         saldo = 0.;
     }
 
-    public void añadeSaldo (Double precioProducto){
+    public void aÃ±adeSaldo (Double precioProducto){
         saldo += precioProducto;
     }
 

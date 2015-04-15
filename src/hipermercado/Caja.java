@@ -17,10 +17,10 @@ public class Caja extends Thread{
         if (clienteActual == null || estaAbierta) return;
         sleep((long) (damePrecio(clienteActual) / 10));
         if (!estaAbierta) {
-            cola.añadirPrincipio(clienteActual);
+            cola.aÃ±adirPrincipio(clienteActual);
             return;
         }
-        contabilidad.añadeSaldo(damePrecio(clienteActual));
+        contabilidad.aÃ±adeSaldo(damePrecio(clienteActual));
     }
 
     private Cliente llamarCliente() throws InterruptedException {
