@@ -2,17 +2,17 @@ package hipermercado;
 
 public class Contabilidad {
 
-    private float saldo;
+    private Double saldo;
 
     public Contabilidad() {
-        saldo = 0;
+        saldo = 0.;
     }
 
-    public void añadeSaldo (float precioProducto){
+    public void añadeSaldo (Double precioProducto){
         saldo += precioProducto;
     }
 
-    public float dameSaldo (){
+    public Double dameSaldo (){
         return saldo;
     }
 }
