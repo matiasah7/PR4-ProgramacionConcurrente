@@ -7,6 +7,7 @@ class Cliente{
     private static int nn=0;
     private static String[] nombres={"José","Pedro","Ana","Juan","Juana", "Antonio","María", "Francisco","Marta","Julio","Felipe","Luis"};
     private static String[] apellidos={"Armas","Cabrera", "Díaz","García", "González","Hernández","López","Rodríguez", "Moreno", "Muñoz", "Martín"};
+
     public Cliente(){
         int nnombre=r.nextInt(nombres.length);
         int napellido1=r.nextInt(apellidos.length);
@@ -22,6 +23,7 @@ class Cliente{
     public double damePrecioCarro(){
         return precioCarro;
     }
+
     public String toString(){
         return dameNombre()+": "+ damePrecioCarro()+"€";
     }

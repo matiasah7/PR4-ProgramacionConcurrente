@@ -1,5 +1,6 @@
 package hipermercado;
 
+import java.sql.Time;
 import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
@@ -51,14 +52,11 @@ public class Cola {
     }
 
     private Cliente esperarSegundos() throws InterruptedException {
-        for (int i = 0; i < 10; i++) {
-            sleep(1);
-            if (hayClientesCola()) {
-                Cliente cliente = colaClientes.get(0);
-                colaClientes.remove(0);
-                actualClientes--;
-            }
+        long tiempo = System.currentTimeMillis();
+        while (!hayClientesCola()){
+            if(System.currentTimeMillis() == tiempo + 1000) return null;
         }
+        if(hayClientesCola()) return colaClientes.get(0);
         return null;
     }
 
@@ -69,6 +67,5 @@ public class Cola {
     private boolean estaAbierta() {
         return (estadoCola == 0);
     }
-
 
 }
