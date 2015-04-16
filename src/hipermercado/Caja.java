@@ -17,7 +17,10 @@ public class Caja extends Thread{
 
     public void atenderCliente() throws InterruptedException {
         clienteActual = llamarCliente();
-        if (clienteActual == null || estaAbierta) return;
+        if (clienteActual == null){
+            estaAbierta = false;
+            return;
+        }
         sleep((long) (damePrecio(clienteActual) / 10));
         if (!estaAbierta) {
             cola.añadirPrincipio(clienteActual);
@@ -41,7 +44,7 @@ public class Caja extends Thread{
         while (estaAbierta){
             try {
                 atenderCliente();
-                System.out.println("La caja"+  idCaja + "está atendiendo a ");
+                System.out.println("La caja"+  idCaja + "está atendiendo a " + clienteActual.dameNombre());
                 } catch (InterruptedException e) {
                 e.printStackTrace();
             }

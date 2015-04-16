@@ -34,12 +34,14 @@ public class Cola {
         colaClientes.add(0,cliente);
     }
 
-    public Cliente sacar() throws InterruptedException {
+    public synchronized Cliente sacar() throws InterruptedException {
         if (hayClientesCola()) {
             Cliente cliente = colaClientes.get(0);
             colaClientes.remove(0);
             actualClientes--;
+            return cliente;
         } else {
+            System.out.println("entro");
             if (estaAbierta()) {
                 return esperarSegundos();
             }
