@@ -5,15 +5,18 @@ public class Caja extends Thread{
     private final Cola cola;
     private final Contabilidad contabilidad;
     private boolean estaAbierta;
+    private long idCaja;
+    private Cliente clienteActual;
 
     public Caja(Cola cola, Contabilidad contabilidad) {
         this.cola = cola;
         this.contabilidad = contabilidad;
+        idCaja = getId();
         estaAbierta = true;
     }
 
     public void atenderCliente() throws InterruptedException {
-        Cliente clienteActual = llamarCliente();
+        clienteActual = llamarCliente();
         if (clienteActual == null || estaAbierta) return;
         sleep((long) (damePrecio(clienteActual) / 10));
         if (!estaAbierta) {
@@ -31,6 +34,18 @@ public class Caja extends Thread{
 
     private double damePrecio(Cliente clienteActual) throws InterruptedException {
         return clienteActual.damePrecioCarro();
+    }
+
+    @Override
+    public void run(){
+        while (estaAbierta){
+            try {
+                atenderCliente();
+                System.out.println("La caja"+  idCaja + "está atendiendo a ");
+                } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
