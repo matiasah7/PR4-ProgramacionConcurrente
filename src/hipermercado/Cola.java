@@ -41,7 +41,6 @@ public class Cola {
             actualClientes--;
             return cliente;
         } else {
-            System.out.println("entro");
             if (estaAbierta()) {
                 return esperarSegundos();
             }

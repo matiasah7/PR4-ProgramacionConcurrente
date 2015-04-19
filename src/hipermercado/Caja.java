@@ -44,6 +44,7 @@ public class Caja extends Thread{
         while (estaAbierta){
             try {
                 atenderCliente();
+                if(clienteActual==null)return;
                 System.out.println("La caja"+  idCaja + "está atendiendo a " + clienteActual.dameNombre());
                 } catch (InterruptedException e) {
                 e.printStackTrace();
