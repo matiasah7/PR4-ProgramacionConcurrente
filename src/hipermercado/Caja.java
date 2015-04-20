@@ -7,19 +7,20 @@ public class Caja extends Thread {
     private boolean cajaAbierta;
     private long idCaja;
     private Cliente clienteActual;
+    private Double cuentaCaja;
 
     public Caja(Cola cola, Contabilidad contabilidad) {
         this.cola = cola;
         this.contabilidad = contabilidad;
         idCaja = getId();
         cajaAbierta = true;
+        cuentaCaja = 0.;
     }
 
     public void atenderCliente() throws InterruptedException {
-        System.out.println("La caja " + idCaja + "va a empezar a atender");
+        System.out.println("----> La caja " + idCaja + " llama a un cliente para atenderle.");
         clienteActual = llamarCliente();
         if (clienteActual == null) {
-            cajaAbierta = false;
             return;
         }
         Thread.sleep((long) (damePrecio(clienteActual) / 10) * 1000);
@@ -27,20 +28,30 @@ public class Caja extends Thread {
             cola.añadirPrincipio(clienteActual);
             return;
         }
-
-        System.out.println("La caja " + idCaja + " está atendiendo a " + clienteActual.dameNombre());
-        contabilidad.añadeSaldo(damePrecio(clienteActual));
+        cuentaCaja += clienteActual.damePrecioCarro();
     }
 
     private Cliente llamarCliente() throws InterruptedException {
         Cliente cliente = cola.sacar();
-        if (cliente == null) cajaAbierta = false;
-        if(cliente != null)System.out.println("La caja" + idCaja + "llama a un cliente " + cliente.dameNombre());
+        if (cliente == null){
+            cerrarCaja();
+        }
         return cliente;
+    }
+
+    private void cerrarCaja() {
+        cajaAbierta = false;
+        añadirSaldoContabilidad();
     }
 
     private double damePrecio(Cliente clienteActual) throws InterruptedException {
         return clienteActual.damePrecioCarro();
+    }
+
+    private void añadirSaldoContabilidad(){
+        contabilidad.añadeSaldo(cuentaCaja);
+        System.out.println("····· La caja " + idCaja + " añadió a la contabilidad " + cuentaCaja);
+        System.out.println(":::::: La contabilidad actual es: " + contabilidad.dameSaldo());
     }
 
     @Override
@@ -49,7 +60,7 @@ public class Caja extends Thread {
             try {
                 atenderCliente();
                 if (clienteActual == null) return;
-                System.out.println("La caja " + idCaja + "termina de atender a " + clienteActual.dameNombre());
+                System.out.println("<---- La caja " + idCaja + " terminó de atender al cliente: " + clienteActual.dameNombre());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

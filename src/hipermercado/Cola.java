@@ -26,7 +26,9 @@ public class Cola {
         if (estaAbierta()) {
             actualClientes++;
             if (actualClientes > maxClientes) maxClientes = actualClientes;
-            colaClientes.add(new Cliente());
+            Cliente nuevoCliente = new Cliente();
+            colaClientes.add(nuevoCliente);
+            System.out.println("-> El cliente: " + nuevoCliente.dameNombre() + " se ha unido a la cola.");
         }
     }
 
@@ -39,6 +41,7 @@ public class Cola {
             Cliente cliente = colaClientes.get(0);
             colaClientes.remove(0);
             actualClientes--;
+            System.out.println("<- El cliente: " + cliente.dameNombre() + " ha salido de la cola.");
             return cliente;
         } else {
             if (estaAbierta()) {
@@ -57,7 +60,10 @@ public class Cola {
         while (!hayClientesCola()) {
             if (System.currentTimeMillis() == tiempo + 1000) return null;
         }
-        if (hayClientesCola()) return colaClientes.get(0);
+        if (hayClientesCola()) {
+            System.out.println("<- El cliente: " + colaClientes.get(0).dameNombre() + " ha salido de la cola.");
+            return colaClientes.get(0);
+        }
         return null;
     }
 
