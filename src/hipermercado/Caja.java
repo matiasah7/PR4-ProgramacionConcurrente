@@ -16,6 +16,7 @@ public class Caja extends Thread {
     }
 
     public void atenderCliente() throws InterruptedException {
+        System.out.println("La caja " + idCaja + "va a empezar a atender");
         clienteActual = llamarCliente();
         if (clienteActual == null) {
             cajaAbierta = false;
@@ -26,12 +27,15 @@ public class Caja extends Thread {
             cola.añadirPrincipio(clienteActual);
             return;
         }
+
+        System.out.println("La caja " + idCaja + " está atendiendo a " + clienteActual.dameNombre());
         contabilidad.añadeSaldo(damePrecio(clienteActual));
     }
 
     private Cliente llamarCliente() throws InterruptedException {
         Cliente cliente = cola.sacar();
         if (cliente == null) cajaAbierta = false;
+        if(cliente != null)System.out.println("La caja" + idCaja + "llama a un cliente " + cliente.dameNombre());
         return cliente;
     }
 
@@ -45,7 +49,7 @@ public class Caja extends Thread {
             try {
                 atenderCliente();
                 if (clienteActual == null) return;
-                System.out.println("La caja " + idCaja + " está atendiendo a " + clienteActual.dameNombre());
+                System.out.println("La caja " + idCaja + "termina de atender a " + clienteActual.dameNombre());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
