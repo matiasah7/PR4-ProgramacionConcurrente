@@ -1,6 +1,5 @@
 package hipermercado;
 
-import java.sql.Time;
 import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
@@ -10,12 +9,13 @@ public class Cola {
     private ArrayList<Cliente> colaClientes;
     private int actualClientes;
     private int maxClientes;
-    private int estadoCola = 0;  // 0 --> Abierta  1 --> Cerrada
+    private boolean colaAbierta;
 
     public Cola() {
         colaClientes = new ArrayList<Cliente>();
         maxClientes = 0;
         actualClientes = 0;
+        colaAbierta = true;
     }
 
     public int getMaxClientes() {
@@ -31,7 +31,7 @@ public class Cola {
     }
 
     public void añadirPrincipio(Cliente cliente) {
-        colaClientes.add(0,cliente);
+        colaClientes.add(0, cliente);
     }
 
     public synchronized Cliente sacar() throws InterruptedException {
@@ -49,15 +49,15 @@ public class Cola {
     }
 
     public void cerrar() {
-        estadoCola = 1;
+        colaAbierta = false;
     }
 
     private Cliente esperarSegundos() throws InterruptedException {
         long tiempo = System.currentTimeMillis();
-        while (!hayClientesCola()){
-            if(System.currentTimeMillis() == tiempo + 1000) return null;
+        while (!hayClientesCola()) {
+            if (System.currentTimeMillis() == tiempo + 1000) return null;
         }
-        if(hayClientesCola()) return colaClientes.get(0);
+        if (hayClientesCola()) return colaClientes.get(0);
         return null;
     }
 
@@ -66,7 +66,7 @@ public class Cola {
     }
 
     private boolean estaAbierta() {
-        return (estadoCola == 0);
+        return (colaAbierta);
     }
 
 }
