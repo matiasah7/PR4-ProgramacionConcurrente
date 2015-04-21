@@ -29,10 +29,12 @@ public class Main {
             caja.start();
         }
 
-        long tiempoCola = System.nanoTime() * 1000000;
+        //Duende aqui!
+
+        long tiempoCola = System.nanoTime() / 1000000;
         for (int i = 0; i < numeroClientes; i++) {
             sleep((long) new Random().nextInt(6) * 1000);
-            if (System.nanoTime() * 1000000 > tiempoCola + 60000) cola.cerrar();
+            if (System.nanoTime() / 1000000 > tiempoCola + 60000) cola.cerrar();
             cola.añadirFinal();
         }
 
@@ -43,6 +45,7 @@ public class Main {
                 e.printStackTrace();
             }
         }
+
     }
 
 }

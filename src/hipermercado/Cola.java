@@ -30,6 +30,7 @@ public class Cola {
             colaClientes.add(nuevoCliente);
             System.out.println("-> El cliente: " + nuevoCliente.dameNombre() + " se ha unido a la cola " + " en el momento : " + System.nanoTime() / 1000000);
         }
+        System.out.println("javito");
     }
 
     public synchronized void añadirPrincipio(Cliente cliente) {
@@ -55,14 +56,20 @@ public class Cola {
         colaAbierta = false;
     }
 
-    private Cliente esperarSegundos() throws InterruptedException {
-        long tiempo = System.nanoTime() / 1000000;
+    private synchronized Cliente esperarSegundos() {
         while (!hayClientesCola()) {
-            if (System.nanoTime()/1000000 >= tiempo + 10000) return null;
+            try {
+                wait(10000);
+                if (!hayClientesCola())return null;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         if (hayClientesCola()) {
             System.out.println("<- El cliente: " + colaClientes.get(0).dameNombre() + " ha salido de la cola " + " en el momento : " + System.nanoTime() / 1000000);
-            return colaClientes.get(0);
+            Cliente cliente = colaClientes.get(0);
+            colaClientes.remove(0);
+            return cliente;
         }
         return null;
     }
