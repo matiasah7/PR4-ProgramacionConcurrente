@@ -41,8 +41,7 @@ public class Main {
         for (Caja caja : listaCajas) {
             try {
                 caja.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
             }
         }
 

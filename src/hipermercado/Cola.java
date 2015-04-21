@@ -37,7 +37,7 @@ public class Cola {
         colaClientes.add(0, cliente);
     }
 
-    public synchronized Cliente sacar() throws InterruptedException {
+    public synchronized Cliente sacar() throws Exception {
         if (hayClientesCola()) {
             Cliente cliente = colaClientes.get(0);
             colaClientes.remove(0);
