@@ -1,32 +1,48 @@
 package hipermercado;
-public class Main{
 
-    public static void main(String[] args){
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+
+import static java.lang.Thread.sleep;
+
+public class Main {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        System.out.println("Introduzca el número de clientes: ");
+        int numeroClientes = new Scanner(System.in).nextInt();
+
+        System.out.println("Introduzca el número de cajas: ");
+        int numeroCajas = new Scanner(System.in).nextInt();
 
         Cola cola = new Cola();
-
         Contabilidad contabilidad = new Contabilidad();
 
-        Caja caja1 = new Caja(cola, contabilidad);
-        Caja caja2 = new Caja(cola, contabilidad);
-        Caja caja3 = new Caja(cola, contabilidad);
+        ArrayList<Caja> listaCajas = new ArrayList<Caja>();
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < numeroCajas; i++) {
+            listaCajas.add(new Caja(cola, contabilidad));
+        }
+
+        for (Caja caja : listaCajas) {
+            caja.start();
+        }
+
+        long tiempoCola = System.nanoTime() * 1000000;
+        for (int i = 0; i < numeroClientes; i++) {
+            sleep((long) new Random().nextInt(6) * 1000);
+            if (System.nanoTime() * 1000000 > tiempoCola + 60000) cola.cerrar();
             cola.añadirFinal();
         }
 
-        caja1.start();
-        caja2.start();
-        caja3.start();
-
-        try {
-            caja1.join();
-            caja2.join();
-            caja3.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for (Caja caja : listaCajas) {
+            try {
+                caja.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
 }

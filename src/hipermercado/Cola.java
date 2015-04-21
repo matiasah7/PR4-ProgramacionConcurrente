@@ -22,17 +22,17 @@ public class Cola {
         return maxClientes;
     }
 
-    public void añadirFinal() {
-        if (estaAbierta()) {
+    public synchronized void añadirFinal() {
+        if (colaAbierta) {
             actualClientes++;
             if (actualClientes > maxClientes) maxClientes = actualClientes;
             Cliente nuevoCliente = new Cliente();
             colaClientes.add(nuevoCliente);
-            System.out.println("-> El cliente: " + nuevoCliente.dameNombre() + " se ha unido a la cola.");
+            System.out.println("-> El cliente: " + nuevoCliente.dameNombre() + " se ha unido a la cola " + " en el momento : " + System.nanoTime() / 1000000);
         }
     }
 
-    public void añadirPrincipio(Cliente cliente) {
+    public synchronized void añadirPrincipio(Cliente cliente) {
         colaClientes.add(0, cliente);
     }
 
@@ -41,10 +41,10 @@ public class Cola {
             Cliente cliente = colaClientes.get(0);
             colaClientes.remove(0);
             actualClientes--;
-            System.out.println("<- El cliente: " + cliente.dameNombre() + " ha salido de la cola.");
+            System.out.println("<- El cliente: " + cliente.dameNombre() + " ha salido de la cola " + " en el momento : " + System.nanoTime() / 1000000);
             return cliente;
         } else {
-            if (estaAbierta()) {
+            if (colaAbierta) {
                 return esperarSegundos();
             }
         }
@@ -56,12 +56,12 @@ public class Cola {
     }
 
     private Cliente esperarSegundos() throws InterruptedException {
-        long tiempo = System.currentTimeMillis();
+        long tiempo = System.nanoTime() / 1000000;
         while (!hayClientesCola()) {
-            if (System.currentTimeMillis() == tiempo + 1000) return null;
+            if (System.nanoTime()/1000000 >= tiempo + 10000) return null;
         }
         if (hayClientesCola()) {
-            System.out.println("<- El cliente: " + colaClientes.get(0).dameNombre() + " ha salido de la cola.");
+            System.out.println("<- El cliente: " + colaClientes.get(0).dameNombre() + " ha salido de la cola " + " en el momento : " + System.nanoTime() / 1000000);
             return colaClientes.get(0);
         }
         return null;
@@ -69,10 +69,6 @@ public class Cola {
 
     private boolean hayClientesCola() {
         return (!colaClientes.isEmpty());
-    }
-
-    private boolean estaAbierta() {
-        return (colaAbierta);
     }
 
 }

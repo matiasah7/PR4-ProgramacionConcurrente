@@ -18,7 +18,7 @@ public class Caja extends Thread {
     }
 
     public void atenderCliente() throws InterruptedException {
-        System.out.println("----> La caja " + idCaja + " llama a un cliente para atenderle.");
+        System.out.println("----> La caj15a " + idCaja + " llama a un cliente para atenderle." + " en el momento : " + System.nanoTime() / 1000000);
         clienteActual = llamarCliente();
         if (clienteActual == null) {
             return;
@@ -50,8 +50,8 @@ public class Caja extends Thread {
 
     private void añadirSaldoContabilidad(){
         contabilidad.añadeSaldo(cuentaCaja);
-        System.out.println("····· La caja " + idCaja + " añadió a la contabilidad " + cuentaCaja);
-        System.out.println(":::::: La contabilidad actual es: " + contabilidad.dameSaldo());
+        System.out.println("····· La caja " + idCaja + " añadió a la contabilidad " + cuentaCaja + " en el momento : " + System.nanoTime() / 1000000);
+        System.out.println(":::::: La contabilidad actual es: " + contabilidad.dameSaldo() + " en el momento : " + System.nanoTime() / 1000000);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Caja extends Thread {
             try {
                 atenderCliente();
                 if (clienteActual == null) return;
-                System.out.println("<---- La caja " + idCaja + " terminó de atender al cliente: " + clienteActual.dameNombre());
+                System.out.println("<---- La caja " + idCaja + " terminó de atender al cliente: " + clienteActual.dameNombre() + " en el momento : " + System.nanoTime() / 1000000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
